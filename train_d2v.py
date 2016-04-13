@@ -14,6 +14,7 @@ import logging
 import os.path
 import sys
 # import cPickle as pickle
+import pprint
 
 program = os.path.basename(sys.argv[0])
 logger = logging.getLogger(program)
@@ -54,7 +55,6 @@ class LabeledLineSentence(object):
         shuffle(self.sentences)
         return self.sentences
 
-# sources = {'test-neg.txt':'TEST_NEG', 'test-pos.txt':'TEST_POS', 'train-neg.txt':'TRAIN_NEG', 'train-pos.txt':'TRAIN_POS', 'train-unsup.txt':'TRAIN_UNS'}
 sources = {'vword/trans.txt': 'Tran'}
 
 
@@ -68,4 +68,9 @@ for epoch in range(50):
     logger.info('Epoch %d' % epoch)
     model.train(sentences.sentences_perm())
 
-model.save('./imdb.d2v')
+feat_array = numpy.zeros((418, 100))
+
+for i in range(418):
+    prefix = 'Tran_' + str(i)
+    feat_array[i] = model.docvecs[prefix].tolist()
+
