@@ -55,22 +55,26 @@ class LabeledLineSentence(object):
         shuffle(self.sentences)
         return self.sentences
 
-sources = {'vword/trans.txt': 'Tran'}
+
+def d2v_onefile(onefile, outcsv, d2v_dim):
+    sources = {onefile: 'SENT'}
+    sentences = LabeledLineSentence(sources)
+    model = Doc2Vec(min_count=1, window=10, size=d2v_dim, sample=1e-4, negative=5, workers=7)
+    model.build_vocab(sentences.to_array())
+    for epoch in range(50):
+        logger.info('Epoch %d' % epoch)
+        model.train(sentences.sentences_perm())
+    feat_array = numpy.zeros((418, d2v_dim))
+    for i in range(418):
+        prefix = 'SENT_' + str(i)
+        feat_array[i] = model.docvecs[prefix].tolist()
+    numpy.savetxt(outcsv, feat_array, delimiter=",")
 
 
-sentences = LabeledLineSentence(sources)
+d2v_onefile('vword/trans.txt', 'tran_d2v.csv', 100)
+d2v_onefile('vword/vword_emotion.txt', 'emotion_d2v.csv', 50)
+d2v_onefile('vword/vword_headposee.txt', 'headpose_d2v.csv', 25)
+d2v_onefile('vword/vword_gaze.txt', 'gaze_d2v.csv', 25)
 
-model = Doc2Vec(min_count=1, window=10, size=100, sample=1e-4, negative=5, workers=7)
 
-model.build_vocab(sentences.to_array())
-
-for epoch in range(50):
-    logger.info('Epoch %d' % epoch)
-    model.train(sentences.sentences_perm())
-
-feat_array = numpy.zeros((418, 100))
-
-for i in range(418):
-    prefix = 'Tran_' + str(i)
-    feat_array[i] = model.docvecs[prefix].tolist()
 
