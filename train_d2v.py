@@ -71,10 +71,10 @@ def d2v_onefile(onefile, outcsv, d2v_dim):
     numpy.savetxt(outcsv, feat_array, delimiter=",")
 
 
-d2v_onefile('vword/trans.txt', 'tran_d2v.csv', 100)
-d2v_onefile('vword/vword_emotion.txt', 'emotion_d2v.csv', 50)
-d2v_onefile('vword/vword_headposee.txt', 'headpose_d2v.csv', 25)
-d2v_onefile('vword/vword_gaze.txt', 'gaze_d2v.csv', 25)
+d2v_onefile('vword/trans.txt', 'tran_d2v.csv', 50)
+d2v_onefile('vword/vword_emotion.txt', 'emotion_d2v.csv', 20)
+d2v_onefile('vword/vword_headposee.txt', 'headpose_d2v.csv', 10)
+d2v_onefile('vword/vword_gaze.txt', 'gaze_d2v.csv', 10)
 
 
 
